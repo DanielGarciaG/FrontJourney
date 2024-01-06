@@ -1,0 +1,88 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="titulo">Conecting travel </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="titulo">Find Journey</h5>
+                    <form [formGroup]="form" (ngSubmit)="searchTravels()">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-plane-departure" 
+                                    [class.green-icon]="this.form.get('Origin')?.valid"
+                                    [class.red-icon]="this.form.get('Origin')?.invalid && this.form.get('Origin')?.touched">
+                                </i>   
+                            </span>
+                            <input formControlName="Origin" type="text" maxlength="3" class="form-control" placeholder="Origin" aria-label="Origin" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-plane-arrival" 
+                                    [class.green-icon]="this.form.get('Destination')?.valid"
+                                    [class.red-icon]="this.form.get('Destination')?.invalid && this.form.get('Destination')?.touched">
+                                </i>
+                            </span>
+                            <input formControlName="Destination" type="text" maxlength="3" class="form-control" placeholder="Destination" aria-label="Destination" aria-describedby="basic-addon1">
+                        </div>
+                        <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="titulo">Route Travel</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td colspan="2"><strong>Journey</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Origin:</td>
+                                <td>{{ journeyOrigin }}</td>
+                            </tr>
+                            <tr>
+                                <td>Destination:</td>
+                                <td>{{ journeyDestination }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Price:</td>
+                                <td>{{ journeyPrice }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td colspan="5"><strong>Travels</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Origin</td>
+                                <td>Destination</td>
+                                <td>Total Price</td>
+                            </tr>
+                            <tr *ngFor="let flight of flights">
+                                <td>{{ flight.origin }}</td>
+                                <td>{{ flight.destination }}</td>
+                                <td>{{ flight.price }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="containError == true" class="alert alert-danger" role="alert">
+        {{messageError}}
+    </div>
+</div>
