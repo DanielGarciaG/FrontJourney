@@ -20,7 +20,9 @@ export class JourneyComponent implements OnInit {
   errorResponse! : ErrorResponse;
   messageError! : string;
   containError! : boolean;
-
+  OriginUpperCase: string = '';
+  DestinationUpperCase: string = '';
+  areSameValues! : boolean;
 
   constructor(private fb: FormBuilder, private _journeyService: JourneyService) { 
     this.form = this.fb.group({
@@ -31,6 +33,7 @@ export class JourneyComponent implements OnInit {
 
   ngOnInit(): void {
     this.containError =  false;
+    this.areSameValues = false;
   }
 
   searchTravels(){
@@ -39,7 +42,11 @@ export class JourneyComponent implements OnInit {
       Destination: this.form.get('Destination')?.value,
     }
 
-    this._journeyService.getTravels(journey.Origin, journey.Destination).subscribe((data: DataJourney) => {
+    if(journey.Origin == journey.Destination){
+      this.areSameValues = true;
+    }else{
+      this.areSameValues = false;
+      this._journeyService.getTravels(journey.Origin, journey.Destination).subscribe((data: DataJourney) => {
         this.journeyData = data;
         this.journeyOrigin = this.journeyData.journey.origin;
         this.journeyDestination = this.journeyData.journey.destination;
@@ -51,7 +58,16 @@ export class JourneyComponent implements OnInit {
         this.errorResponse = error;
         this.containError = true;
         this.messageError = this.errorResponse.error.message;
-      })    
-    this.form.reset();
+      })  
+      this.form.reset();
+    }
+  }
+
+  convertOriginUpperCase(){
+    this.OriginUpperCase = this.OriginUpperCase.toUpperCase();
+  }
+
+  convertDestinationUpperCase(){
+    this.DestinationUpperCase = this.DestinationUpperCase.toUpperCase();
   }
 }
