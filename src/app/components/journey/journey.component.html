@@ -57,7 +57,7 @@
                             </tr>
                             <tr>
                                 <td>Total Price:</td>
-                                <td>{{ journeyPrice }}</td>
+                                <td>{{ journeyPrice * valueRate | number }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,7 +74,17 @@
                             <tr *ngFor="let flight of flights">
                                 <td>{{ flight.origin }}</td>
                                 <td>{{ flight.destination }}</td>
-                                <td>{{ flight.price }}</td>
+                                <td>{{ flight.price * valueRate | number }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Change currency
+                                </td>
+                                <td>
+                                    <select class="form-select" id="dropdown" [(ngModel)]="selectedCurrency" (change)="onChangeCurrency()">
+                                        <option *ngFor="let optionCurrency of optionsCurrency" [value]="optionCurrency.value">{{ optionCurrency.label }}</option>
+                                      </select>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -4,6 +4,7 @@ import { JourneyService } from 'src/app/services/journey.service';
 import { DataJourney } from './DataJourney';
 import { Flight } from './Flight';
 import { ErrorResponse } from './ErrorResponse';
+import { ConvertCurrency } from './ConvertCurrency';
 
 @Component({
   selector: 'app-journey',
@@ -15,14 +16,21 @@ export class JourneyComponent implements OnInit {
   journeyData! : DataJourney;
   journeyOrigin! : string;
   journeyDestination! : string;
-  journeyPrice! : number;
+  journeyPrice : number = 0;
   flights! :Flight[];
   errorResponse! : ErrorResponse;
   messageError! : string;
-  containError! : boolean;
+  containError : boolean = false;
   OriginUpperCase: string = '';
   DestinationUpperCase: string = '';
-  areSameValues! : boolean;
+  areSameValues : boolean = false;
+  valueRate : number = 1;
+  selectedCurrency: string = "USD";
+  optionsCurrency = [
+    { label: 'Dollar', value: 'USD' },
+    { label: 'Euro', value: 'EUR' },
+    { label: 'Pound sterling', value: 'GBP' },
+  ];
 
   constructor(private fb: FormBuilder, private _journeyService: JourneyService) { 
     this.form = this.fb.group({
@@ -32,8 +40,6 @@ export class JourneyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.containError =  false;
-    this.areSameValues = false;
   }
 
   searchTravels(){
@@ -69,5 +75,20 @@ export class JourneyComponent implements OnInit {
 
   convertDestinationUpperCase(){
     this.DestinationUpperCase = this.DestinationUpperCase.toUpperCase();
+  }
+
+  onChangeCurrency() {
+    this._journeyService.convertCurrency().subscribe((data: ConvertCurrency) => {
+      console.log(data);
+
+      switch(this.selectedCurrency){
+        case "USD": this.valueRate = data.rates.USD;
+          break;
+        case "EUR": this.valueRate = data.rates.EUR;
+          break;
+        case "GBP": this.valueRate = data.rates.GBP;
+          break;
+      }
+    })
   }
 }
